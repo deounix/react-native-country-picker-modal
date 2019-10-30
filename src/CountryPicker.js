@@ -128,7 +128,6 @@ export default class CountryPicker extends Component {
 
   constructor(props) {
     super(props)
-    this.openModal = this.openModal.bind(this)
 
     setCountries(props.flagType)
     let countryList = [...props.countryList]
@@ -153,7 +152,6 @@ export default class CountryPicker extends Component {
       .map(c => c[0])
 
     this.state = {
-      modalVisible: this.props.visible || false,
       cca2List: countryList,
       dataSource: ds.cloneWithRows(countryList),
       filter: '',
@@ -205,27 +203,27 @@ export default class CountryPicker extends Component {
 
   onSelectCountry(cca2) {
     this.setState({
-      modalVisible: false,
       filter: '',
       dataSource: ds.cloneWithRows(this.state.cca2List)
-    })
+    });
 
     this.props.onChange({
       cca2,
       ...countries[cca2],
       flag: undefined,
       name: this.getCountryName(countries[cca2])
-    })
+    });
+    this.props.onClose();
   }
 
   onClose = () => {
     this.setState({
-      modalVisible: false,
+      visible: false,
       filter: '',
       dataSource: ds.cloneWithRows(this.state.cca2List)
     })
     if (this.props.onClose) {
-      this.props.onClose()
+      this.props.onClose();
     }
   }
 
@@ -252,15 +250,9 @@ export default class CountryPicker extends Component {
     ).sort()
   }
 
-  openModal = this.openModal.bind(this)
-
   // dimensions of country list and window
   itemHeight = getHeightPercent(7)
   listHeight = countries.length * this.itemHeight
-
-  openModal() {
-    this.setState({ modalVisible: true })
-  }
 
   scrollTo(letter) {
     // find position of first country that starts with letter
@@ -372,7 +364,7 @@ export default class CountryPicker extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           disabled={this.props.disabled}
-          onPress={() => this.setState({ modalVisible: true })}
+          onPress={() => this.props.onOpen()}
           activeOpacity={0.7}
         >
           {this.props.children ? (
@@ -391,8 +383,8 @@ export default class CountryPicker extends Component {
         <Modal
           transparent={this.props.transparent}
           animationType={this.props.animationType}
-          visible={this.state.modalVisible}
-          onRequestClose={() => this.setState({ modalVisible: false })}
+          visible={this.props.visible}
+          onRequestClose={() => this.props.onClose()}
         >
           <SafeAreaView style={styles.modalContainer}>
             <View style={styles.header}>
