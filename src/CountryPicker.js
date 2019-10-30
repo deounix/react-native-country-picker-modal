@@ -144,11 +144,6 @@ export default class CountryPicker extends Component {
     // Sort country list
     countryList = countryList
       .map(c => [c, this.getCountryName(countries[c])])
-      .sort((a, b) => {
-        if (a[1] < b[1]) return -1
-        if (a[1] > b[1]) return 1
-        return 0
-      })
       .map(c => c[0])
 
     this.state = {
