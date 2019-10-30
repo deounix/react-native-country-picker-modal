@@ -80,6 +80,7 @@ export default class CountryPicker extends Component {
     animationType: PropTypes.oneOf(['slide', 'fade', 'none']),
     flagType: PropTypes.oneOf(Object.values(FLAG_TYPES)),
     hideAlphabetFilter: PropTypes.bool,
+    visible: PropTypes.bool,
     renderFilter: PropTypes.func,
     showCallingCode: PropTypes.bool,
     filterOptions: PropTypes.object
@@ -92,7 +93,8 @@ export default class CountryPicker extends Component {
     filterPlaceholder: 'Filter',
     autoFocusFilter: true,
     transparent: false,
-    animationType: 'none'
+    animationType: 'none',
+    visible: false
   }
 
   static renderEmojiFlag(cca2, emojiStyle) {
@@ -151,7 +153,7 @@ export default class CountryPicker extends Component {
       .map(c => c[0])
 
     this.state = {
-      modalVisible: false,
+      modalVisible: this.props.visible || false,
       cca2List: countryList,
       dataSource: ds.cloneWithRows(countryList),
       filter: '',
